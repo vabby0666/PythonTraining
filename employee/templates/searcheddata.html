@@ -1,0 +1,42 @@
+{% load static %}
+<html>
+<head>
+
+	<title>Searched Data</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{% static 'css/foundation.css' %}">
+	<link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+</head>
+<body>
+        <center>
+            <h3 style="color:#129AD1">Data Records similar to the Search : <span style="color:red" >{{ sitem }}</span></h3>
+        <div class="large-5 large-centered columns">
+        <table>
+        <tr>
+        <th>Name</th>
+        <th>Email ID</th>
+        <th>Mobile Number</th>
+        </tr>
+        {% for item in table %}
+        <tr>
+        <td>{{ item.username }}</td>
+        <td>{{ item.emailId }}</td>
+        <td>{{ item.mobileNumber }}</td>
+        </tr>
+        {% endfor %}
+
+        </table><a href="http://127.0.0.1:8000/employee/" id="homepage" class="button small radius">Go back to Home Page</a>
+        </div>
+        </center>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/vendor/modernizr.js' %}"></script>
+    <script src="{% static 'js/foundation.min.js' %}"></script>
+    <script src="{% static 'js/dataadd.js' %}"></script>
+    <script type="text/javascript">
+        $(document).foundation();
+
+    </script>
+</body>
+</html>

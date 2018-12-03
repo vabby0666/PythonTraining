@@ -1,0 +1,36 @@
+{% load static %}
+<html>
+
+<head>
+
+	<title>JSON EXAMPLE</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{% static 'css/foundation.css' %}">
+	<link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+
+</head>
+
+<body>
+<div class="row"><div class="large-4 large-centered columns">
+    <h1 style="color:skyblue;"><center>Update Form</center></h1>
+    <form id="updateform">
+    UserName:<input type="text" value="{{ username }}" id="uname"><br>
+    Email-ID:<input type="text" value="{{ emailId }}" id="uemail" readonly="readonly"><br>
+    Phone:<input type="text" value="{{ mobileNumber }}" id="uphone" onkeypress="javascript: validate(event)"><br>
+</form>
+<center><p id="dvCSVu"></p>
+<button type="submit" onclick="updatenow()" class="button small radius">update</button>
+</center>
+</div></div>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/vendor/modernizr.js' %}"></script>
+    <script src="{% static 'js/foundation.min.js' %}"></script>
+    <script src="{% static 'js/dataadd.js' %}"></script>
+    <script type="text/javascript">
+        $(document).foundation();
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+{% load static %}
+<html>
+<head>
+	<title>JSON EXAMPLE</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{% static 'css/foundation.css' %}">
+	<link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+<style>
+	input {
+		height: 30px !important;
+		width: 200px !important;
+		padding: 0 !important;
+		margin: 0 !important;
+	}
+	button {
+		margin: 0 !important;
+	}
+
+</style>
+</head>
+
+<body>
+  <center><div style="background-color: grey; width: 80%;">
+    <h1>Welcome To JSON Contact Portal</h1>
+  </div></center>
+
+<center><ul class="tabs" data-tab style="margin-top: 30px; padding-top:30px; border: dotted; width: 40.5%;">
+  <li class="tab-title"><a href="#panel11">Request Form</a></li>
+  <li class="tab-title active"><a href="#panel21" id="view_btn">View Requests</a></li>
+  <li class="tab-title"><a href="#panel51">Search Data</a></li>
+  <li class="tab-title"><a href="#panel31">Download</a></li>
+  <li class="tab-title"><a href="#panel41">Upload</a></li>
+  <li class="tab-title" style="visibility:hidden"><a href="#panel6"></a></li>
+</ul></center>
+
+<div class="tabs-content row" id="testimonials">
+
+    <div class="content row" id="panel11">
+  		<div class="large-4 large-centered columns" >
+			<div class="large-2 columns" ><form id="myform" style="width: 250px !important; margin: 0;">
+				Name:  <input type="text" name="name" id="name"><br>
+				Email: <input type="text" name="email" id="email"><br>
+				Phone: <input type="text" name="phone" id="phone" onkeypress="javascript: validate(event)"><br>
+			</form>
+            </div>
+            <div class="large-2 columns" style="margin-top:20px;">
+                <button id="sub_btn" class="button small radius">Submit</button><br>
+    		    <p id="success" style="width: 300px;">
+            </div>
+        </div>
+    </div>
+
+
+  <div class="content row" id="panel21">
+      <div class="large-6 large-centered columns">
+       {% if table.count > 0 %}
+      <table>
+        <tr>
+        <th>Name</th>
+        <th>Email ID</th>
+        <th>Mobile Number</th>
+        </tr>
+        {% for item in table %}
+        <tr>
+        <td>{{ item.username }}</td>
+        <td>{{ item.emailId }}</td>
+        <td>{{ item.mobileNumber }}</td>
+        <td><a class="button tiny radius" onclick="deleterecord(this)" id="{{ item.id }}">Delete</a></td>
+        <td><a class="button tiny radius" href="/employee/{{ item.id }}/update">Update</a></td>
+        </tr>
+
+        {% endfor %}
+      </table>
+       {% else %}
+          <p style="color:red">No data found in database</p>
+          {% endif %}
+        </div>
+      </div>
+
+
+  <div class="content row" id="panel31">
+	<center><a onclick="downloadcsv()" class="button small radius">Download CSV File</a>
+  	<p id="dwntxt"></p></center>
+  </div>
+
+ <div class="content row" id="panel51">
+     <div class="large-5 large-centered columns">
+         <br>
+    <center><form action="/employeesearch/" method="get">
+        <input type="text" id="searchdata" name="searchdata"><br>
+        <input type="submit" class="button small radius">
+    </form>
+    </center>
+     </div>
+ </div>
+
+
+  <div class="content row" id="panel41">
+  	<center>
+        <div>
+            <form action="{% url 'upload' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+                <p>Upload only .CSV file</p>
+                <input type="file" id="file" name="file" accept=".csv">
+                <button class="button tiny  " id="uploadbtn">Upload CSV</button>
+            </form>
+        </div>
+    </center>
+</div>
+
+    <div class="content active" id="panel6" style="color:red">
+    <center>
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags %} {% endif %}{{ message|safe }}
+        {% endfor %}
+        {% endif %}
+        <p id="errormsgs"></p>
+    </center>
+    </div>
+
+</div>
+
+	<script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/vendor/modernizr.js' %}"></script>
+    <script src="{% static 'js/foundation.min.js' %}"></script>
+    <script src="{% static 'js/dataadd.js' %}"></script>
+    <script type="text/javascript">
+        $(document).foundation();
+    </script>
+
+<script>
+
+    function downloadcsv(table){
+        {% if table.count > 0 %}
+        $("#dwntxt").html(" ");
+        var downloaddata ="username,emailId,mobileNumber"+"\n";
+        {% for item in table %}
+        downloaddata=downloaddata+"{{ item.username }}"+","+"{{ item.emailId }}"+","+"{{ item.mobileNumber }}"+"\n";
+        {% endfor %}
+
+        var uri = 'data:text/csv;charset=utf-8,' + escape(downloaddata);
+
+        var link = document.createElement("a");
+        link.href = uri;
+        link.style = "visibility:hidden";
+        link.download = "mangodbdata" + ".csv";
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        {% else %}
+        $("#dwntxt").css("color","red");
+        $("#dwntxt").html("No Data found to download!!");
+        {% endif %}
+    }
+</script>
+</body>
+
+</html>
